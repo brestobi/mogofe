@@ -1,7 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Member, Memory, Wish, GalleryItem, Activity } from '@/lib/supabase';
+import { useState, useEffect, useCallback } from "react";
+import {
+  Member,
+  Memory,
+  Wish,
+  GalleryItem,
+  Activity,
+} from "@/lib/supabase";
 import {
   getAllMembers,
   getMemberById,
@@ -11,7 +17,7 @@ import {
   getRecentActivities,
   getStatistics,
   getUpcomingBirthdays,
-} from '@/utils/data';
+} from "@/utils/data";
 
 export function useMembers() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -19,18 +25,23 @@ export function useMembers() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchMembers() {
       try {
         setLoading(true);
         const data = await getAllMembers();
         setMembers(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch members');
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to fetch members"
+        );
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchMembers();
   }, []);
 
   return { members, loading, error };
@@ -43,21 +54,28 @@ export function useMember(id: string | null) {
 
   useEffect(() => {
     if (!id) {
+      setMember(null);
       setLoading(false);
       return;
     }
-    async function fetch() {
+
+    async function fetchMember(memberId: string) {
       try {
         setLoading(true);
-        const data = await getMemberById(id as string);
+        const data = await getMemberById(memberId);
         setMember(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch member');
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to fetch member"
+        );
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchMember(id);
   }, [id]);
 
   return { member, loading, error };
@@ -69,21 +87,24 @@ export function useMemberMemories(memberId: string | null) {
 
   useEffect(() => {
     if (!memberId) {
+      setMemories([]);
       setLoading(false);
       return;
     }
-    async function fetch() {
+
+    async function fetchMemories(id: string) {
       try {
         setLoading(true);
-        const data = await getMemoriesByMemberId(memberId as string);
+        const data = await getMemoriesByMemberId(id);
         setMemories(data);
       } catch (err) {
-        console.error('Failed to fetch memories:', err);
+        console.error("Failed to fetch memories:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchMemories(memberId);
   }, [memberId]);
 
   return { memories, loading };
@@ -95,21 +116,24 @@ export function useMemberWishes(memberId: string | null) {
 
   useEffect(() => {
     if (!memberId) {
+      setWishes([]);
       setLoading(false);
       return;
     }
-    async function fetch() {
+
+    async function fetchWishes(id: string) {
       try {
         setLoading(true);
-        const data = await getWishesByMemberId(memberId as string);
+        const data = await getWishesByMemberId(id);
         setWishes(data);
       } catch (err) {
-        console.error('Failed to fetch wishes:', err);
+        console.error("Failed to fetch wishes:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchWishes(memberId);
   }, [memberId]);
 
   return { wishes, loading };
@@ -121,21 +145,24 @@ export function useMemberGallery(memberId: string | null) {
 
   useEffect(() => {
     if (!memberId) {
+      setGallery([]);
       setLoading(false);
       return;
     }
-    async function fetch() {
+
+    async function fetchGallery(id: string) {
       try {
         setLoading(true);
-        const data = await getGalleryByMemberId(memberId as string);
+        const data = await getGalleryByMemberId(id);
         setGallery(data);
       } catch (err) {
-        console.error('Failed to fetch gallery:', err);
+        console.error("Failed to fetch gallery:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchGallery(memberId);
   }, [memberId]);
 
   return { gallery, loading };
@@ -146,18 +173,19 @@ export function useActivities(limit: number = 10) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchActivities() {
       try {
         setLoading(true);
         const data = await getRecentActivities(limit);
         setActivities(data);
       } catch (err) {
-        console.error('Failed to fetch activities:', err);
+        console.error("Failed to fetch activities:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchActivities();
   }, [limit]);
 
   return { activities, loading };
@@ -168,18 +196,19 @@ export function useStatistics() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchStatistics() {
       try {
         setLoading(true);
         const data = await getStatistics();
         setStats(data);
       } catch (err) {
-        console.error('Failed to fetch statistics:', err);
+        console.error("Failed to fetch statistics:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchStatistics();
   }, []);
 
   return { stats, loading };
@@ -190,18 +219,19 @@ export function useUpcomingBirthdays(days: number = 30) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchBirthdays() {
       try {
         setLoading(true);
         const data = await getUpcomingBirthdays(days);
         setBirthdays(data);
       } catch (err) {
-        console.error('Failed to fetch birthdays:', err);
+        console.error("Failed to fetch birthdays:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+
+    fetchBirthdays();
   }, [days]);
 
   return { birthdays, loading };
@@ -212,25 +242,33 @@ export function useAdminAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const auth = localStorage.getItem('familyroots_admin');
-    setIsAuthenticated(auth === 'true');
+    const auth = localStorage.getItem("familyroots_admin");
+    setIsAuthenticated(auth === "true");
     setIsLoading(false);
   }, []);
 
   const login = useCallback((password: string): boolean => {
-    const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
+    const correctPassword =
+      process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
+
     if (password === correctPassword) {
-      localStorage.setItem('familyroots_admin', 'true');
+      localStorage.setItem("familyroots_admin", "true");
       setIsAuthenticated(true);
       return true;
     }
+
     return false;
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('familyroots_admin');
+    localStorage.removeItem("familyroots_admin");
     setIsAuthenticated(false);
   }, []);
 
-  return { isAuthenticated, isLoading, login, logout };
+  return {
+    isAuthenticated,
+    isLoading,
+    login,
+    logout,
+  };
 }
