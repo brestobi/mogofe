@@ -49,7 +49,7 @@ export function useMember(id: string | null) {
     async function fetch() {
       try {
         setLoading(true);
-        const data = await getMemberById(id);
+        const data = await getMemberById(id as string);
         setMember(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch member');
@@ -75,7 +75,7 @@ export function useMemberMemories(memberId: string | null) {
     async function fetch() {
       try {
         setLoading(true);
-        const data = await getMemoriesByMemberId(memberId);
+        const data = await getMemoriesByMemberId(memberId as string);
         setMemories(data);
       } catch (err) {
         console.error('Failed to fetch memories:', err);
@@ -101,7 +101,7 @@ export function useMemberWishes(memberId: string | null) {
     async function fetch() {
       try {
         setLoading(true);
-        const data = await getWishesByMemberId(memberId);
+        const data = await getWishesByMemberId(memberId as string);
         setWishes(data);
       } catch (err) {
         console.error('Failed to fetch wishes:', err);
@@ -127,7 +127,7 @@ export function useMemberGallery(memberId: string | null) {
     async function fetch() {
       try {
         setLoading(true);
-        const data = await getGalleryByMemberId(memberId);
+        const data = await getGalleryByMemberId(memberId as string);
         setGallery(data);
       } catch (err) {
         console.error('Failed to fetch gallery:', err);
