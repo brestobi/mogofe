@@ -158,7 +158,7 @@ export default function FamilyTreePage() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Family Tree</h1>
             <p className="text-sm text-slate-500">
-              {members.length} members across {new Set(members.map(m => m.generation).filter(Boolean)).size} generations
+              {members.length} members across {new Set(members.map(m => m.generation).filter((g): g is number => g !== null && g !== undefined)).size} generations
             </p>
           </div>
           <div className="flex items-center gap-4">

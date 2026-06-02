@@ -248,8 +248,8 @@ export async function getStatistics() {
   const livingMembers = allMembers.filter(m => !m.death_date);
   const deceasedMembers = allMembers.filter(m => m.death_date);
 
-  const generations = new Set(allMembers.map(m => m.generation).filter(Boolean));
-  const branches = new Set(allMembers.map(m => m.branch).filter(Boolean));
+  const generations = new Set(allMembers.map(m => m.generation).filter((g): g is number => g !== null && g !== undefined));
+  const branches = new Set(allMembers.map(m => m.branch).filter((b): b is string => !!b));
 
   const ages = livingMembers.map(m => {
     if (!m.birth_date) return 0;

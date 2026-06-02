@@ -20,13 +20,13 @@ export default function MembersPage() {
   const [selectedGeneration, setSelectedGeneration] = useState<string>('all');
 
   const branches = useMemo(() => {
-    const branchSet = new Set(members.map(m => m.branch).filter(Boolean));
+    const branchSet = new Set(members.map(m => m.branch).filter((b): b is string => !!b));
     return Array.from(branchSet);
   }, [members]);
 
   const generations = useMemo(() => {
-    const genSet = new Set(members.map(m => m.generation).filter(Boolean));
-    return Array.from(genSet).sort((a, b) => (a || 0) - (b || 0));
+    const genSet = new Set(members.map(m => m.generation).filter((g): g is number => g !== null && g !== undefined));
+    return Array.from(genSet).sort((a, b) => a - b);
   }, [members]);
 
   const filteredMembers = useMemo(() => {
